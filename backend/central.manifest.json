@@ -1,0 +1,12 @@
+{
+  "SERVICE_NAME": "cotacoes-omie",
+  "NAMESPACE": "cotacoes-omie",
+  "IMAGE": "ghcr.io/cotacoes-omie-backend",
+  "IMAGE_TAG": "latest",
+  "HOST": "cotacoes-omie.example.com",
+  "CENTRAL_ATIVACAO_URL": "https://central-ativacao.example.com",
+  "APP_CODE": "cotacoes-omie",
+  "REPLICAS": "1",
+  "HPA_MIN": "1",
+  "HPA_MAX": "3"
+}

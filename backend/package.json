@@ -1,0 +1,16 @@
+{
+  "name": "cotacoes-omie-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "oonCore-back dev",
+    "start": "oonCore-back start",
+    "activate": "oonCore-back activate",
+    "build:image": "oonCore-back build:image",
+    "k8s:render": "oonCore-back k8s:render",
+    "deploy": "oonCore-back deploy"
+  },
+  "dependencies": {
+    "@oondemand/oon-core-back": "^0.4.26"
+  }
+}

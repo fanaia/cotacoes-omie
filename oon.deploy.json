@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "appCode": "cotacoes-omie",
+  "runtime": "ooncore-node-react",
+  "components": {
+    "backend": {
+      "path": "backend"
+    },
+    "frontend": {
+      "path": "frontend"
+    }
+  },
+  "resourceProfile": "small",
+  "health": {
+    "livePath": "/health/live",
+    "readyPath": "/api/health/ready",
+    "versionPath": "/api/health/version"
+  }
+}

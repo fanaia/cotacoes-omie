@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "name": "Cotações Omie",
+  "slug": "cotacoes-omie",
+  "appKind": "member-central",
+  "backend": {
+    "metadataUrl": "/core/metadata"
+  },
+  "layout": {
+    "shell": "default",
+    "sidebar": "core",
+    "topbar": "core",
+    "footer": "core"
+  },
+  "navigation": {
+    "mode": "auto"
+  },
+  "pages": [],
+  "collections": [],
+  "pipelines": [],
+  "documents": []
+}
