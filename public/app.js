@@ -1,0 +1,14 @@
+let state;
+const request = async (url, options={}) => { const response=await fetch(url,{headers:{"content-type":"application/json"},...options}); const value=await response.json(); if(!response.ok) throw new Error(value.error); return value; };
+const notify = text => { const el=document.querySelector("#message"); el.textContent=text; el.style.display="block"; setTimeout(()=>el.style.display="none",3000); };
+async function load(){ state=await request("/api/state"); render(); }
+function render(){
+  document.querySelector("#metrics").innerHTML=[['Requisições',state.requests.length],['Itens consolidados',state.needs.length],['Alocações',state.allocations.length],['Pedidos',state.orders.length]].map(([l,v])=>`<div class="metric"><span>${l}</span><strong>${v}</strong></div>`).join('');
+  document.querySelector("#needs").innerHTML=state.needs.map(n=>`<article class="card"><span class="eyebrow">PRODUTO ${n.productCode}</span><h3>${n.availableQuantity} disponíveis</h3><p>${n.totalQuantity} solicitados · ${n.allocatedQuantity} alocados</p><div class="origins">${n.origins.map(o=>`Req. ${o.omieRequestCode}: ${o.quantity}`).join(' · ')}</div>${n.availableQuantity>0?`<form class="allocation" data-id="${n.id}"><select name="supplierId">${state.suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`)}</select><input name="quantity" type="number" min="0.01" step="0.01" max="${n.availableQuantity}" value="${n.availableQuantity}"><input name="unitPrice" type="number" min="0" step="0.01" placeholder="Preço"><button>Alocar</button></form>`:''}</article>`).join('')||'<p>Sincronize o Omie para carregar as requisições.</p>';
+  document.querySelector("#orders").innerHTML=state.orders.map(o=>`<article class="order"><div><strong>${o.number||o.integrationCode}</strong><div>${state.suppliers.find(s=>s.id===o.supplierId)?.name||o.supplierId}</div></div><div><span class="tag">${o.stage}</span> <span class="tag">${o.paymentStatus}</span></div></article>`).join('')||'<p>Nenhum pedido gerado.</p>';
+  document.querySelectorAll('.allocation').forEach(form=>form.addEventListener('submit',async e=>{e.preventDefault();const data=Object.fromEntries(new FormData(form));await request('/api/allocations',{method:'POST',body:JSON.stringify({needId:form.dataset.id,...data})});notify('Itens alocados');await load();}));
+}
+document.querySelector('#sync').onclick=async()=>{const r=await request('/api/sync',{method:'POST'});notify(`${r.imported} requisições sincronizadas`);await load();};
+document.querySelector('#create-orders').onclick=async()=>{const r=await request('/api/orders',{method:'POST'});notify(`${r.length} pedidos gerados`);await load();};
+document.querySelector('#track').onclick=async()=>{await request('/api/orders/track',{method:'POST'});notify('Situações atualizadas');await load();};
+load().catch(e=>notify(e.message));
